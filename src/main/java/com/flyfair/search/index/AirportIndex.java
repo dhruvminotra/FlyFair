@@ -30,6 +30,7 @@ public final class AirportIndex {
     private final Map<String, List<Airport>> byName = new HashMap<>();    // norm(airport/city name) -> airports
     private final Map<String, List<Airport>> byAlias = new HashMap<>();   // norm(curated alias/multilingual) -> airports
     private final Map<String, List<Airport>> byRegion = new HashMap<>();  // norm(region name) -> airports
+    private final Map<String, List<Airport>> byCountry = new HashMap<>(); // norm(country name) -> airports
 
     /** Union of all searchable phrases (names + cities + aliases) for prefix / fuzzy scanning. */
     private final Map<String, List<Airport>> byTerm = new HashMap<>();
@@ -48,6 +49,9 @@ public final class AirportIndex {
         }
         if (a.regionName() != null && !a.regionName().isBlank()) {
             add(byRegion, TextNormalizer.normalize(a.regionName()), a);
+        }
+        if (a.country() != null && !a.country().isBlank()) {
+            add(byCountry, TextNormalizer.normalize(a.country()), a);
         }
     }
 
@@ -79,6 +83,7 @@ public final class AirportIndex {
     public List<Airport> byExactName(String norm) { return byName.getOrDefault(norm, List.of()); }
     public List<Airport> byAlias(String norm) { return byAlias.getOrDefault(norm, List.of()); }
     public List<Airport> byRegion(String norm) { return byRegion.getOrDefault(norm, List.of()); }
+    public List<Airport> byCountry(String norm) { return byCountry.getOrDefault(norm, List.of()); }
     public List<Airport> byTerm(String norm) { return byTerm.getOrDefault(norm, List.of()); }
 
     /** Distinct searchable phrases, for prefix / fuzzy candidate generation. */

@@ -30,6 +30,7 @@ public final class AirportSearchService {
 
     private static final int DEFAULT_LIMIT = 10;
     private static final int MAX_FALLBACK_GROUPS = 25; // cap prefix/fuzzy fan-out
+    private static final int MAX_COUNTRY_AIRPORTS = 15; // a country result shows its major airports only
 
     private final AirportIndex index;
 
@@ -76,6 +77,14 @@ public final class AirportSearchService {
         if (!regionHits.isEmpty()) {
             addGroup(results, covered, dedupeAirports(regionHits), MatchType.REGION_EXPANSION, raw,
                     LocationType.REGION, 0);
+        }
+        // Tier 6: country expansion (Japan). Capped to the major airports — we have no passenger
+        // -volume signal to rank a country's airports finely, so we surface the largest ones.
+        List<Airport> countryHits = index.byCountry(norm);
+        if (!countryHits.isEmpty()) {
+            List<Airport> major = sortByImportance(dedupeAirports(countryHits));
+            if (major.size() > MAX_COUNTRY_AIRPORTS) major = major.subList(0, MAX_COUNTRY_AIRPORTS);
+            addGroup(results, covered, major, MatchType.COUNTRY_EXPANSION, raw, LocationType.COUNTRY, 0);
         }
 
         // Fallbacks: only if nothing exact-quality matched.
@@ -176,6 +185,9 @@ public final class AirportSearchService {
         Airport first = airports.get(0);
         if (type == LocationType.REGION) {
             return first.regionName() + " (" + airports.size() + " airports in region)";
+        }
+        if (type == LocationType.COUNTRY) {
+            return first.country() + " — major airports (showing " + airports.size() + ")";
         }
         if (type == LocationType.MULTI_AIRPORT_CITY) {
             String city = first.city() != null && !first.city().isBlank() ? first.city() : first.name();

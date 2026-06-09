@@ -22,19 +22,17 @@ import java.util.concurrent.Executors;
 
 /**
  * A tiny dev server (JDK built-in {@code com.sun.net.httpserver}, no extra dependency) that hosts the
- * comparison UI. Routes:
+ * search UI. Routes:
  * <ul>
- *   <li>{@code GET /}             — the HTML page</li>
- *   <li>{@code GET /api/search}  — OUR engine's results as JSON (the real search)</li>
- *   <li>{@code GET /api/compare} — Google Flights' results as JSON (reference only)</li>
+ *   <li>{@code GET /}            — the HTML page</li>
+ *   <li>{@code GET /api/search} — the engine's results as JSON</li>
  * </ul>
  *
- * Run: {@code mvn -q exec:java -Dexec.mainClass=com.flyfair.search.web.HttpSearchServer}
+ * Run: {@code mvn -q compile exec:java -Dexec.mainClass=com.flyfair.search.web.HttpSearchServer}
  */
 public final class HttpSearchServer {
 
     private final AirportSearchService service;
-    private final SearchApiClient apiClient = new SearchApiClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
     public HttpSearchServer(AirportSearchService service) {
@@ -52,14 +50,10 @@ public final class HttpSearchServer {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", app::handleRoot);
         server.createContext("/api/search", app::handleSearch);
-        server.createContext("/api/compare", app::handleCompare);
         server.setExecutor(Executors.newFixedThreadPool(8));
         server.start();
 
         System.out.printf("Loaded %,d airports. Search UI at http://localhost:%d/%n", index.size(), port);
-        System.out.println(app.apiClient.isEnabled()
-                ? "Google Flights comparison: ENABLED (SEARCHAPI_KEY found)"
-                : "Google Flights comparison: disabled (set SEARCHAPI_KEY to enable)");
     }
 
     // ---- routes ----
@@ -99,15 +93,6 @@ public final class HttpSearchServer {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("query", q);
         body.put("results", dto);
-        sendJson(ex, body);
-    }
-
-    private void handleCompare(HttpExchange ex) throws IOException {
-        String q = queryParam(ex, "q");
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("query", q);
-        body.put("enabled", apiClient.isEnabled());
-        body.put("locations", q.isBlank() ? List.of() : apiClient.search(q));
         sendJson(ex, body);
     }
 

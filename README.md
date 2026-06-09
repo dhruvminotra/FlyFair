@@ -5,7 +5,7 @@ index over ~5,300 commercial airports — no external search engine, no runtime 
 codes both directions, region/state expansion, multi-airport metros, same-name disambiguation,
 multi-script queries (EN/中文/日本語/한국어/العربية), accents, and bounded typo tolerance.
 
-See **[MEMO.md](MEMO.md)** for the approach and **[DEMO_SCRIPT.md](DEMO_SCRIPT.md)** for the walkthrough.
+See **[MEMO.md](MEMO.md)** for the approach, decisions, and trade-offs.
 
 ## Requirements
 - **Java 17** and Maven.
@@ -13,30 +13,30 @@ See **[MEMO.md](MEMO.md)** for the approach and **[DEMO_SCRIPT.md](DEMO_SCRIPT.m
   export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || echo /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home)
   ```
 
+> Note: the `compile` below is required after a fresh checkout or `mvn clean` (the `target/`
+> build folder is git-ignored). Once compiled, you can drop `compile` on later runs.
+
 ## Run the eval (proves it beats a naive baseline)
 ```
-mvn -q exec:java
+mvn -q compile exec:java
 ```
-Prints a per-case scorecard and the summary: **ours 28/28 vs naive substring 9/28**.
+Prints a per-case scorecard and the summary: **ours 29/29 vs naive substring 9/29**.
 
 ## Run a single query
 ```
-mvn -q exec:java -Dexec.args="Hawaii"
-mvn -q exec:java -Dexec.args="Bali"
-mvn -q exec:java -Dexec.args="東京"
-mvn -q exec:java -Dexec.args="London"
+mvn -q compile exec:java -Dexec.args="Hawaii"
+mvn -q compile exec:java -Dexec.args="Bali"
+mvn -q compile exec:java -Dexec.args="東京"
+mvn -q compile exec:java -Dexec.args="London"
 ```
 
-## Run the web UI (our engine vs Google Flights, side by side)
+## Run the web UI
 ```
-# optional: enable the Google Flights comparison column
-export SEARCHAPI_KEY=your_key_here
-mvn -q exec:java -Dexec.mainClass=com.flyfair.search.web.HttpSearchServer
+mvn -q compile exec:java -Dexec.mainClass=com.flyfair.search.web.HttpSearchServer
 # then open http://localhost:8080
 ```
-The left column is **our** engine (the real search). The right column is **Google Flights' location
-search** (reference only — we do not use it as our engine). Without `SEARCHAPI_KEY` the UI still runs;
-the comparison column is just disabled. The key is read from the environment and never committed.
+A search-as-you-type page backed by the engine. Each result shows its airports plus the match tier
+(exact IATA, alias, region/country expansion, fuzzy, …). Fully local — no API key, no network.
 
 ## Run the tests (regression guard)
 ```
@@ -47,7 +47,7 @@ a regression turns the build red.
 
 ## Regenerate the data snapshot (one-off, needs network)
 ```
-mvn -q exec:java -Dexec.mainClass=com.flyfair.search.ingest.AirportDataPruner
+mvn -q compile exec:java -Dexec.mainClass=com.flyfair.search.ingest.AirportDataPruner
 ```
 Downloads OurAirports once, prunes to commercial-only, and rewrites the committed
 `src/main/resources/data/airports.csv`, printing kept/dropped counts.
@@ -63,7 +63,7 @@ src/main/java/com/flyfair/search/
   data/       DataLoader (snapshot + curated overlays, with IATA validation)
   ingest/     AirportDataPruner (one-off build step)
   harness/    SearchHarness (CLI), Evaluator, EvalCase, NaiveBaseline
-  web/        HttpSearchServer (UI), SearchApiClient (Google Flights, reference only)
+  web/        HttpSearchServer (search UI)
 src/main/resources/data/
   airports.csv        pruned commercial-airport snapshot (committed)
   aliases.json        curated friendly/tourism/metro aliases

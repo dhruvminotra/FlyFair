@@ -1,0 +1,16 @@
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/data/DataLoader.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/harness/EvalCase.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/harness/Evaluator.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/harness/NaiveBaseline.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/harness/SearchHarness.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/index/AirportIndex.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/ingest/AirportDataPruner.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/model/Airport.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/model/DataSource.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/model/LocationType.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/model/SearchResult.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/normalize/TextNormalizer.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/rank/FuzzyMatcher.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/rank/Ranker.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/search/AirportSearchService.java
+/Users/dhruvminotra/IdeaProjects/FlyFair/src/main/java/com/flyfair/search/web/HttpSearchServer.java

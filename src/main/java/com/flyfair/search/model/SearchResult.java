@@ -15,6 +15,7 @@ public final class SearchResult {
         EXACT_NAME,      // exact city / airport name
         ALIAS,           // curated friendly/endonym/tourism/metro/multilingual term
         REGION_EXPANSION,// "Hawaii" -> all airports in region
+        COUNTRY_EXPANSION,// "Japan" -> the country's major airports
         PREFIX,          // name starts with the query
         FUZZY            // typo-tolerant last resort
     }

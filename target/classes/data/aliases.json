@@ -1,0 +1,12 @@
+{
+  "Brussels": ["BRU"],
+  "Bali": ["DPS"],
+  "Goa": ["GOI"],
+  "Bangalore": ["BLR"],
+  "Saigon": ["SGN"],
+  "Roma": ["FCO", "CIA"],
+  "Tokyo": ["HND", "NRT"],
+  "LON": ["LHR", "LGW", "STN", "LCY", "LTN"],
+  "NYC": ["JFK", "EWR", "LGA"],
+  "TYO": ["HND", "NRT"]
+}
