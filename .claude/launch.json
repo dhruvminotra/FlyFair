@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Fly Fairly Search UI",
+      "runtimeExecutable": "mvn",
+      "runtimeArgs": ["-q", "exec:java", "-Dexec.mainClass=com.flyfair.search.web.HttpSearchServer"],
+      "port": 8080
+    }
+  ]
+}

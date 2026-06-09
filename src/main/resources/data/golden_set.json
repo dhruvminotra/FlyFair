@@ -1,0 +1,41 @@
+[
+  { "query": "JFK",        "note": "exact IATA",                       "expectTopIata": "JFK" },
+  { "query": "TUL",        "note": "code->airport (reverse asymmetry)", "expectTopIata": "TUL" },
+  { "query": "Tulsa",      "note": "name->airport",                     "expectTopIata": "TUL" },
+  { "query": "CTA",        "note": "code->airport",                     "expectTopIata": "CTA" },
+  { "query": "Catania",    "note": "name->airport",                     "expectTopIata": "CTA" },
+  { "query": "BAH",        "note": "code works",                        "expectTopIata": "BAH" },
+  { "query": "Manama",     "note": "city->airport (was broken)",        "expectTopIata": "BAH" },
+  { "query": "Bengaluru",  "note": "city->airport",                     "expectTopIata": "BLR" },
+  { "query": "Bangalore",  "note": "alias endonym->airport",            "expectTopIata": "BLR" },
+  { "query": "Brussels",   "note": "friendly name, city is Zaventem",   "expectTopIata": "BRU" },
+
+  { "query": "Hawaii",     "note": "region expansion",                  "expectTopType": "REGION",
+    "expectContainsIata": ["HNL", "OGG", "KOA", "LIH"] },
+  { "query": "Ontario",    "note": "region expansion (province)",       "expectContainsIata": ["YYZ", "YXU"] },
+  { "query": "Florida",    "note": "US state must win, not Chile",      "expectTopType": "REGION",
+    "expectContainsIata": ["MIA", "MCO"], "mustNotContainIata": ["LSC", "TCO"] },
+
+  { "query": "Bali",       "note": "tourism->DPS, not Balikpapan",      "expectTopIata": "DPS",
+    "mustNotContainIata": ["BPN"] },
+  { "query": "Goa",        "note": "region/tourism->GOI",               "expectContainsIata": ["GOI"] },
+
+  { "query": "LON",        "note": "multi-airport city code",           "expectTopType": "MULTI_AIRPORT_CITY",
+    "expectContainsIata": ["LHR", "LGW", "STN", "LCY", "LTN"] },
+  { "query": "London",     "note": "disambiguate UK / Ontario / KY",    "expectTopType": "MULTI_AIRPORT_CITY",
+    "expectContainsIata": ["LHR", "YXU", "LOZ"] },
+  { "query": "Londn",      "note": "realistic typo",                    "expectContainsIata": ["LHR"] },
+
+  { "query": "東京",        "note": "Japanese -> Tokyo (HND+NRT)",       "expectTopType": "MULTI_AIRPORT_CITY",
+    "expectContainsIata": ["HND", "NRT"] },
+  { "query": "北京",        "note": "Chinese -> Beijing",                "expectContainsIata": ["PEK", "PKX"] },
+  { "query": "서울",        "note": "Korean -> Seoul",                   "expectContainsIata": ["ICN", "GMP"] },
+  { "query": "دبي",        "note": "Arabic -> Dubai",                   "expectTopIata": "DXB" },
+
+  { "query": "Sao Paulo",  "note": "no accent",                         "expectContainsIata": ["GRU", "CGH"] },
+  { "query": "São Paulo",  "note": "accent -> same result",             "expectContainsIata": ["GRU", "CGH"] },
+  { "query": "Roma",       "note": "endonym -> Rome",                   "expectContainsIata": ["FCO", "CIA"] },
+  { "query": "Rome",       "note": "exonym -> Rome",                    "expectContainsIata": ["FCO", "CIA"] },
+  { "query": "München",    "note": "endonym -> Munich",                 "expectTopIata": "MUC" },
+  { "query": "Munich",     "note": "exonym -> Munich",                  "expectTopIata": "MUC" }
+]
